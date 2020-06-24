@@ -7,7 +7,7 @@ executors:
     environment:
       LEIN_ROOT: nbd
       JVM_OPTS: -Xmx3200m
-    working_directory: /home/circleci/datahike
+    working_directory: /home/circleci/datahike-jdbc
 
 jobs:
   setup:
@@ -33,14 +33,33 @@ jobs:
           paths:
             - /home/circleci/.m2
             - /home/circleci/.lein
+      - persist_to_workspace:
+          root: /home/circleci/
+          paths:
+            - .m2
+            - datahike-jdbc
+            - bin
 
-  unittest:
+  integrationtest:
     executor: leiningen
+    docker:
+      - image: circleci/clojure:openjdk-8-lein-2.9.3
+      - image: circleci/postgres:11-alpine
+        environment:
+          POSTGRES_USER: alice
+          POSTGRES_PASSWORD: foo
+          POSTGRES_DB: config-test
+      - image: circleci/mariadb:10.4
+        environment:
+          MYSQL_USER: alice
+          MYSQL_PASSWORD: foo
+          MYSQL_DATABASE: config-test
+          MYSQL_RANDOM_ROOT_PASSWORD: true
     steps:
       - attach_workspace:
           at: /home/circleci
       - run:
-          name: Run Unittests
+          name: Run Integrationtests
           command: lein test
           no_output_timeout: 5m
 
@@ -53,10 +72,10 @@ jobs:
           command: lein deploy clojars
 
 workflows:
-  build_test_and_release:
+  build_and_test:
     jobs:
       - setup
-      - unittest:
+      - integrationtest:
           requires:
             - setup
       - deploy:
@@ -65,4 +84,4 @@ workflows:
               only: master
           requires:
             - setup
-            - unittest
+            - integrationtest

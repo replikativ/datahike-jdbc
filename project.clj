@@ -7,4 +7,10 @@
                  [environ "1.2.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [io.replikativ/datahike "0.3.2-SNAPSHOT"]
-                 [alekcz/konserve-jdbc "0.1.0-SNAPSHOT"]])
+                 [alekcz/konserve-jdbc "0.1.0-SNAPSHOT"]]
+  :deploy-repositories
+  [["clojars"
+    {:url           "https://clojars.org/repo"
+     :username      :env
+     :password      :env
+     :sign-releases false}]])

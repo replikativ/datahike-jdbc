@@ -29,4 +29,4 @@ MARIA_NAME=$(setup_MARIA)
 
 sleep 5
 
-DATAHIKE_STORE_BACKEND=jdbc DATAHIKE_STORE_CONFIG='{:dbtype "h2:mem" :dbname "datahike"}' lein test
+TIMBRE_LEVEL=':warn' DATAHIKE_STORE_BACKEND=jdbc DATAHIKE_STORE_CONFIG='{:dbtype "h2:mem" :dbname "datahike"}' lein test

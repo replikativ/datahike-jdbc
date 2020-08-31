@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1" :scope "provided"]
                  [environ "1.2.0"]
                  [com.taoensso/timbre "4.10.0"]
-                 [io.replikativ/datahike "0.3.2-SNAPSHOT"]
+                 [io.replikativ/datahike "0.3.2-SNAPSHOT" :exclusions [io.replikativ/superv.async]]
                  [alekcz/konserve-jdbc "0.1.0-SNAPSHOT"]]
   :deploy-repositories
   [["clojars"

@@ -34,6 +34,10 @@ DATAHIKE_STORE_BACKEND=jdbc
 DATAHIKE_STORE_CONFIG='{:dbtype "postgresql" :user "datahike" :password "datahike" :dbname "datahike"}'
 ```
 
+It is also possible to pass a configuration url via `:jdbcUrl` like it is mentioned in the underlying library [next.jdbc](https://cljdoc.org/d/seancorfield/next.jdbc/1.0.462/doc/getting-started#the-db-spec-hash-map). The Url can pass additional arguments in the query part or you can combine the url with arguments passed as key-value-pairs.
+
+Arguments not mentioned will be passed downstream to the corresponding jdbc-driver so every configuration option available should be working.
+
 ## Prerequisites
 For this backend to work you need to choose a database that is supported by JDBC. Please have a
 look at the docs for [clojure.java.jdbc](https://github.com/clojure/java.jdbc/). For the sake

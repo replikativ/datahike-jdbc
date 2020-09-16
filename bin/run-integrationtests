@@ -7,7 +7,7 @@ trap teardown EXIT
 
 function setup_PG() {
     if [ -z ${CIRCLECI} ]; then
-        echo $(docker run --detach --publish 5432:5432 --env POSTGRES_DB=config-test --env POSTGRES_USER=alice --env POSTGRES_PASSWORD=foo postgres:11-alpine)
+        echo $(docker run --detach --publish 5432:5432 --env POSTGRES_DB=config-test --env POSTGRES_USER=alice --env POSTGRES_PASSWORD=foo postgres:12-alpine)
     fi
 }
 
@@ -29,4 +29,4 @@ MARIA_NAME=$(setup_MARIA)
 
 sleep 5
 
-TIMBRE_LEVEL=':warn' DATAHIKE_STORE_BACKEND=jdbc DATAHIKE_STORE_CONFIG='{:dbtype "h2:mem" :dbname "datahike"}' lein test
+TIMBRE_LEVEL=':warn' DATAHIKE_STORE_BACKEND=jdbc DATAHIKE_STORE_CONFIG='{:dbtype "h2" :dbname "datahike"}' lein test

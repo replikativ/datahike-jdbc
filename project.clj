@@ -8,6 +8,7 @@
                  [com.taoensso/timbre "4.10.0"]
                  [io.replikativ/datahike "0.3.2-SNAPSHOT" :exclusions [io.replikativ/superv.async]]
                  [alekcz/konserve-jdbc "0.1.0-SNAPSHOT"]]
+  :plugins [[lein-cljfmt "0.6.8"]]
   :deploy-repositories
   [["clojars"
     {:url           "https://clojars.org/repo"

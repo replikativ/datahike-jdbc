@@ -73,7 +73,7 @@ keyword ~:jdbc~. If you want to use other backends than JDBC please refer to the
 ```clojure
   (ns project.core
     (:require [datahike.api :as d]
-              [datahike-jdbc.core])
+              [datahike-jdbc.core]))
 
   ;; This configuration suits the config of the container started above.
   ;; In case you run your PostgreSQL instance with other settings, please

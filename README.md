@@ -61,7 +61,7 @@ Add to your Leiningen or Boot dependencies:
 [![Clojars Project](https://img.shields.io/clojars/v/io.replikativ/datahike-jdbc.svg)](https://clojars.org/io.replikativ/datahike-jdbc)
 
 Now require the Datahike API and the datahike-jdbc namespace in your editor or REPL using the
-keyword ~:jdbc~. If you want to use other backends than JDBC please refer to the official
+keyword `:jdbc`. If you want to use other backends than JDBC please refer to the official
 [Datahike docs](https://github.com/replikativ/datahike/blob/master/doc/config.md).
 
 ### Run PostgreSQL on Docker

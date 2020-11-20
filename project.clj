@@ -1,4 +1,4 @@
-(defproject io.replikativ/datahike-jdbc "0.1.1-SNAPSHOT"
+(defproject io.replikativ/datahike-jdbc "0.1.2-SNAPSHOT"
   :description "Datahike with JDBC data storage backend"
   :license {:name "Eclipse"
             :url "http://www.eclipse.org/legal/epl-v10.html"}

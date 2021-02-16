@@ -5,9 +5,9 @@
   :url "http://github.com/replikativ/datahike-jdbc"
   :dependencies [[org.clojure/clojure "1.10.1" :scope "provided"]
                  [environ "1.2.0"]
-                 [com.taoensso/timbre "5.0.1"]
+                 [com.taoensso/timbre "5.1.2"]
                  [io.replikativ/superv.async "0.2.11"]
-                 [io.replikativ/datahike "0.3.3-SNAPSHOT"]
+                 [io.replikativ/datahike "0.3.3"]
                  [alekcz/konserve-jdbc "0.1.0-SNAPSHOT"]]
   :plugins [[lein-cljfmt "0.7.0"]]
   :deploy-repositories

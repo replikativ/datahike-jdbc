@@ -29,4 +29,4 @@ MARIA_NAME=$(setup_MARIA)
 
 sleep 5
 
-TIMBRE_LEVEL=':warn' DATAHIKE_STORE_BACKEND=jdbc DATAHIKE_STORE_CONFIG='{:dbtype "h2" :dbname "datahike"}' clj -M:test
+TIMBRE_LEVEL=':warn' DATAHIKE_STORE_BACKEND=jdbc DATAHIKE_STORE_CONFIG='{:dbtype "h2" :dbname "datahike"}' clojure -M:test

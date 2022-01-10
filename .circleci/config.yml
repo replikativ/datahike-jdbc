@@ -13,7 +13,7 @@ workflows:
           context: dockerhub-deploy
           requires:
             - tools/setup
-      - tools/integrationtest-postgresql-mariadb
+      - tools/integrationtest-postgresql-mariadb:
           context: dockerhub-deploy
           requires:
             - tools/setup

@@ -2,7 +2,8 @@
   (:require
    #?(:cljs [cljs.test    :as t :refer-macros [is deftest]]
       :clj  [clojure.test :as t :refer        [is deftest]])
-   [datahike.api :as d]))
+   [datahike.api :as d]
+   [datahike-jdbc.core]))
 
 (defn delete-db [config]
   (d/delete-database config)
@@ -53,26 +54,26 @@
                        :schema-flexibility :write})
 
 (deftest ^:integration test-postgresql []
-  (let [config (merge jdbc-base-config
-                      {:store {:dbtype "postgresql"
-                               :jdbcUrl "jdbc:postgresql://localhost/config-test?user=alice"
-                               :password "foo"}})]
+  (let [config (update jdbc-base-config :store
+                       merge {:dbtype "postgresql"
+                              :jdbcUrl "jdbc:postgresql://localhost/config-test?user=alice"
+                              :password "foo"})]
     (setup config)
     (integration-test config)))
 
 (deftest ^:integration test-mysql []
-  (let [config (merge jdbc-base-config
-                      {:store {:dbtype "mysql"
-                               :user "alice"
-                               :password "foo"
-                               :dbname "config-test"}})]
+  (let [config (update jdbc-base-config :store
+                       merge {:dbtype "mysql"
+                              :user "alice"
+                              :password "foo"
+                              :dbname "config-test"})]
     (setup config)
     (integration-test config)))
 
 (deftest ^:integration test-h2 []
-  (let [config (merge jdbc-base-config
-                      {:store {:dbtype "h2"
-                               :dbname "./temp/db"}})]
+  (let [config (update jdbc-base-config :store
+                       merge {:dbtype "h2"
+                              :dbname "./temp/db"})]
     (setup config)
     (integration-test config)))
 

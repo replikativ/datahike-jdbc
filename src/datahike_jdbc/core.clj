@@ -1,5 +1,5 @@
 (ns datahike-jdbc.core
-  (:require [datahike.store :refer [empty-store delete-store connect-store scheme->index default-config config-spec]]
+  (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec]]
             [datahike.config :refer [map-from-env]]
             [hitchhiker.tree.bootstrap.konserve :as kons]
             [konserve-jdbc.core :as k]
@@ -15,9 +15,6 @@
 
 (defmethod connect-store :jdbc [store-config]
   (k/new-jdbc-store store-config))
-
-(defmethod scheme->index :jdbc [_]
-  :datahike.index/hitchhiker-tree)
 
 (defmethod default-config :jdbc [config]
   (merge

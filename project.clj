@@ -1,4 +1,4 @@
-(defproject io.replikativ/datahike-jdbc "0.1.2-SNAPSHOT"
+(defproject io.replikativ/datahike-jdbc "0.1.2"
   :description "Datahike with JDBC data storage backend"
   :license {:name "Eclipse"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -6,9 +6,8 @@
   :dependencies [[org.clojure/clojure "1.10.1" :scope "provided"]
                  [environ "1.2.0"]
                  [com.taoensso/timbre "5.1.2"]
-                 [io.replikativ/superv.async "0.2.11"]
-                 [io.replikativ/datahike "0.3.3"]
-                 [alekcz/konserve-jdbc "0.1.0-SNAPSHOT"]]
+                 [io.replikativ/datahike "0.6.1526"]
+                 [alekcz/konserve-jdbc "0.1.1"]]
   :plugins [[lein-cljfmt "0.7.0"]]
   :deploy-repositories
   [["clojars"

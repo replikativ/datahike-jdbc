@@ -3,19 +3,18 @@
             [datahike.config :refer [map-from-env]]
             [hitchhiker.tree.bootstrap.konserve :as kons]
             [konserve-jdbc.core :as k]
-            [clojure.spec.alpha :as s]
-            [superv.async :refer [<?? S]]))
+            [clojure.spec.alpha :as s]))
 
 (defmethod empty-store :jdbc [store-config]
   (kons/add-hitchhiker-tree-handlers
-   (<?? S (k/new-jdbc-store store-config))))
+   (k/new-jdbc-store store-config)))
 
 (defmethod delete-store :jdbc [store-config]
-  (let [conn (<?? S (k/new-jdbc-store store-config))]
-    (<?? S (k/delete-store conn))))
+  (let [conn (k/new-jdbc-store store-config)]
+    (k/delete-store conn)))
 
 (defmethod connect-store :jdbc [store-config]
-  (<?? S (k/new-jdbc-store store-config)))
+  (k/new-jdbc-store store-config))
 
 (defmethod scheme->index :jdbc [_]
   :datahike.index/hitchhiker-tree)

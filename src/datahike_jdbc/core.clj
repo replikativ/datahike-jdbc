@@ -7,14 +7,14 @@
 
 (defmethod empty-store :jdbc [store-config]
   (kons/add-hitchhiker-tree-handlers
-   (k/new-jdbc-store store-config)))
+   (k/connect-store store-config)))
 
 (defmethod delete-store :jdbc [store-config]
-  (let [conn (k/new-jdbc-store store-config)]
+  (let [conn (k/connect-store store-config)]
     (k/delete-store conn)))
 
 (defmethod connect-store :jdbc [store-config]
-  (k/new-jdbc-store store-config))
+  (k/connect-store store-config))
 
 (defmethod default-config :jdbc [config]
   (merge

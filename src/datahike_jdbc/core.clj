@@ -8,8 +8,7 @@
   (k/connect-store store-config))
 
 (defmethod delete-store :jdbc [store-config]
-  (let [conn (k/connect-store store-config)]
-    (k/delete-store conn)))
+  (k/delete-store store-config))
 
 (defmethod connect-store :jdbc [store-config]
   (k/connect-store store-config))

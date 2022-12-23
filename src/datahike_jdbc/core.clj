@@ -1,13 +1,11 @@
 (ns datahike-jdbc.core
   (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec]]
             [datahike.config :refer [map-from-env]]
-            [hitchhiker.tree.bootstrap.konserve :as kons]
             [konserve-jdbc.core :as k]
             [clojure.spec.alpha :as s]))
 
 (defmethod empty-store :jdbc [store-config]
-  (kons/add-hitchhiker-tree-handlers
-   (k/connect-store store-config)))
+  (k/connect-store store-config))
 
 (defmethod delete-store :jdbc [store-config]
   (let [conn (k/connect-store store-config)]

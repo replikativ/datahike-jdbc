@@ -7,7 +7,7 @@
                  [environ "1.2.0"]
                  [com.taoensso/timbre "5.1.2"]
                  [io.replikativ/datahike "0.6.1526"]
-                 [alekcz/konserve-jdbc "0.1.1"]]
+                 [io.replikativ/konserve-jdbc "0.1.1"]]
   :plugins [[lein-cljfmt "0.7.0"]]
   :deploy-repositories
   [["clojars"

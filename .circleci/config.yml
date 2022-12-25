@@ -1,38 +1,50 @@
 version: 2.1
 
 orbs:
-  lein: replikativ/clj-lein@0
+  tools: replikativ/clj-tools@0
 
 workflows:
   build-test-and-deploy:
     jobs:
-      - lein/setup
-      - lein/format:
+      - tools/setup:
+          context: dockerhub-deploy
+          setup_cljs: false
+      - tools/format:
+          context: dockerhub-deploy
           requires:
-            - lein/setup
-      - lein/integrationtest-postgresql-mariadb:
+            - tools/setup
+      - tools/integrationtest-postgresql-mariadb:
+          context: dockerhub-deploy
           requires:
-            - lein/setup
-      - lein/build:
+            - tools/setup
+      - tools/build:
+          jarname: "datahike-jdbc"
+          context: dockerhub-deploy
           requires:
-            - lein/setup
-      - lein/deploy-snapshot:
-          context: clojars-deploy
+            - tools/setup
+      - tools/deploy-snapshot:
+          jarname: "datahike-jdbc"
+          context:
+            - clojars-deploy
+            - dockerhub-deploy
           filters:
             branches:
               only: development
           requires:
-            - lein/setup
-            - lein/format
-            - lein/build
-            - lein/integrationtest-postgresql-mariadb
-      - lein/deploy-release:
-          context: clojars-deploy
+            - tools/setup
+            - tools/format
+            - tools/integrationtest-postgresql-mariadb
+            - tools/build
+      - tools/deploy-release:
+          jarname: "datahike-jdbc"
+          context:
+            - clojars-deploy
+            - dockerhub-deploy
           filters:
             branches:
               only: master
           requires:
-            - lein/setup
-            - lein/format
-            - lein/build
-            - lein/integrationtest-postgresql-mariadb
+            - tools/setup
+            - tools/format
+            - tools/integrationtest-postgresql-mariadb
+            - tools/build

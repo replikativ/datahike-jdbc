@@ -1,5 +1,5 @@
 (ns datahike-jdbc.core
-  (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec]]
+  (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec release-store]]
             [datahike.config :refer [map-from-env]]
             [konserve-jdbc.core :as k]
             [clojure.spec.alpha :as s]))
@@ -43,3 +43,6 @@
                                :datahike.store.jdbc/password]))
 
 (defmethod config-spec :jdbc [_] ::jdbc)
+
+(defmethod release-store :jdbc [_ store]
+  (k/release store {:sync? true}))

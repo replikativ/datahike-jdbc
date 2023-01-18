@@ -7,13 +7,13 @@ trap teardown EXIT
 
 function setup_PG() {
     if [ -z ${CIRCLECI} ]; then
-        echo $(docker run --detach --publish 5432:5432 --env POSTGRES_DB=config-test --env POSTGRES_USER=alice --env POSTGRES_PASSWORD=foo postgres:12-alpine)
+        echo $(docker run --detach --publish 5432:5432 --env POSTGRES_DB=config-test --env POSTGRES_USER=alice --env POSTGRES_PASSWORD=foo docker.io/postgres:15)
     fi
 }
 
 function setup_MARIA() {
     if [ -z ${CIRCLECI} ]; then
-        echo $(docker run --detach --publish 3306:3306 --env MYSQL_RANDOM_ROOT_PASSWORD=true --env MYSQL_DATABASE=config-test --env MYSQL_USER=alice --env MYSQL_PASSWORD=foo mariadb:10.4)
+        echo $(docker run --detach --publish 3306:3306 --env MYSQL_RANDOM_ROOT_PASSWORD=true --env MYSQL_DATABASE=config-test --env MYSQL_USER=alice --env MYSQL_PASSWORD=foo docker.io/mariadb:10)
     fi
 }
 

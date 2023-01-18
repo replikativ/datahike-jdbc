@@ -8,7 +8,9 @@
 (deftest ^:integration test-postgresql
   (let [config {:store {:backend :jdbc
                         :dbtype "postgresql"
-                        :jdbcUrl "jdbc:postgresql://localhost/config-test?user=alice"
+                        :host "localhost"
+                        :dbname "config-test"
+                        :user "alice"
                         :password "foo"}
                 :schema-flexibility :read
                 :keep-history? false}

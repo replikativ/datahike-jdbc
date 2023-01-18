@@ -1,24 +1,17 @@
 (ns datahike-jdbc.core
-  (:require [datahike.store :refer [empty-store delete-store connect-store scheme->index default-config config-spec]]
+  (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec release-store]]
             [datahike.config :refer [map-from-env]]
-            [hitchhiker.tree.bootstrap.konserve :as kons]
             [konserve-jdbc.core :as k]
-            [clojure.spec.alpha :as s]
-            [superv.async :refer [<?? S]]))
+            [clojure.spec.alpha :as s]))
 
 (defmethod empty-store :jdbc [store-config]
-  (kons/add-hitchhiker-tree-handlers
-   (<?? S (k/new-jdbc-store store-config))))
+  (k/connect-store store-config))
 
 (defmethod delete-store :jdbc [store-config]
-  (let [conn (<?? S (k/new-jdbc-store store-config))]
-    (<?? S (k/delete-store conn))))
+  (k/delete-store store-config))
 
 (defmethod connect-store :jdbc [store-config]
-  (<?? S (k/new-jdbc-store store-config)))
-
-(defmethod scheme->index :jdbc [_]
-  :datahike.index/hitchhiker-tree)
+  (k/connect-store store-config))
 
 (defmethod default-config :jdbc [config]
   (merge
@@ -50,3 +43,6 @@
                                :datahike.store.jdbc/password]))
 
 (defmethod config-spec :jdbc [_] ::jdbc)
+
+(defmethod release-store :jdbc [_ store]
+  (k/release store {:sync? true}))

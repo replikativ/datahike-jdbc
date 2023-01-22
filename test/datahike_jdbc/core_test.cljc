@@ -61,6 +61,36 @@
       (d/delete-database config)
       (is (not (d/database-exists? config))))))
 
+(deftest ^:integration test-mssql
+  (let [config {:store {:backend :jdbc
+                        :dbtype "sqlserver"
+                        :user "sa"
+                        :password "passwordA1!"
+                        :dbname "tempdb"}
+                :schema-flexibility :write
+                :keep-history? false}
+        _ (d/delete-database config)]
+    (is (not (d/database-exists? config)))
+    (let [_      (d/create-database config)
+          conn   (d/connect config)]
+      (d/transact conn [{:db/ident :name
+                         :db/valueType :db.type/string
+                         :db/cardinality :db.cardinality/one}
+                        {:db/ident :age
+                         :db/valueType :db.type/long
+                         :db/cardinality :db.cardinality/one}])
+      (d/transact conn [{:db/id 1, :name  "Ivan", :age   15}
+                        {:db/id 2, :name  "Petr", :age   37}
+                        {:db/id 3, :name  "Ivan", :age   37}
+                        {:db/id 4, :age 15}])
+      (is (= (d/q '[:find ?e :where [?e :name]] @conn)
+             #{[3] [2] [1]}))
+
+      (d/release conn)
+      (is (d/database-exists? config))
+      (d/delete-database config)
+      (is (not (d/database-exists? config))))))
+
 (deftest ^:integration test-h2
   (let [config {:store {:backend :jdbc
                         :dbtype "h2"

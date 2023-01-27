@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+
+trap teardown EXIT
+
+function setup_PG() {
+    if [ -z ${CIRCLECI} ]; then
+        echo $(docker run --detach --publish 5432:5432 --env POSTGRES_DB=config-test --env POSTGRES_USER=alice --env POSTGRES_PASSWORD=foo docker.io/postgres:15)
+    fi
+}
+
+function setup_MYSQL() {
+    if [ -z ${CIRCLECI} ]; then
+        echo $(docker run --detach --publish 3306:3306 --env MYSQL_RANDOM_ROOT_PASSWORD=true --env MYSQL_DATABASE=config-test --env MYSQL_USER=alice --env MYSQL_PASSWORD=foo docker.io/mysql:8)
+    fi
+}
+
+function setup_MSSQL() {
+    if [ -z ${CIRCLECI} ]; then
+        echo $(docker run --detach --publish 1433:1433 --env ACCEPT_EULA=Y --env SA_PASSWORD=passwordA1! --env MSSQL_PID=Developer --env MSSQL_TCP_PORT=1433 mcr.microsoft.com/mssql/server:2019-latest)
+    fi
+}
+
+function teardown() {
+    if [ -z ${CIRCLECI} ]; then
+        docker rm -f ${PG_NAME}
+        docker rm -f ${MYSQL_NAME}
+        docker rm -f ${MSSQL_NAME}
+    fi
+}
+
+PG_NAME=$(setup_PG)
+MYSQL_NAME=$(setup_MYSQL)
+MSSQL_NAME=$(setup_MSSQL)
+
+sleep 5
+
+TIMBRE_LEVEL=':warn' DATAHIKE_STORE_BACKEND=jdbc DATAHIKE_STORE_CONFIG='{:dbtype "h2" :dbname "datahike"}' clojure -M:test

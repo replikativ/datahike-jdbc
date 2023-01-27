@@ -5,7 +5,6 @@
 <a href="https://clojars.org/io.replikativ/datahike-jdbc"> <img src="https://img.shields.io/clojars/v/io.replikativ/datahike-jdbc.svg" /></a>
 <a href="https://circleci.com/gh/replikativ/datahike-jdbc"><img src="https://circleci.com/gh/replikativ/datahike-jdbc.svg?style=shield"/></a>
 <a href="https://github.com/replikativ/datahike-jdbc/tree/development"><img src="https://img.shields.io/github/last-commit/replikativ/datahike-jdbc/development"/></a>
-<a href="https://versions.deps.co/replikativ/datahike-jdbc" title="Dependencies Status"><img src="https://versions.deps.co/replikativ/datahike-jdbc/status.svg" /></a>
 </p>
 
 The goal of this backend is to support all JDBC backends in one with no penalty in performance.
@@ -14,11 +13,11 @@ lot of them we chose to use JDBC as a backend instead of implementing them one b
 goal is that this backend supersedes [datahike-postgres](https://github.com/replikativ/datahike-postgres/).
 
 ## Migrate from datahike-postgres to datahike-jdbc
-The migration should be seamless. First you update the dependencies from datahike-postgres to
-datahike-jdbc. Then you adapt the configuration as follows.
+The migration should be seamless. First you update the dependencies from `datahike-postgres` to
+`datahike-jdbc`. Then you adapt the configuration as follows.
 
 ## Configuration
-Please read the  Datahike configuration docs](https://github.com/replikativ/datahike/blob/master/doc/config.md) on how to configure your backend. A sample configuration for PostgreSQL for passing as parameter to e.g.
+Please read the [Datahike configuration docs](https://github.com/replikativ/datahike/blob/master/doc/config.md) on how to configure your backend. A sample configuration for PostgreSQL for passing as parameter to e.g.
 `create-database`, `connect` and `delete-database`:
 ```clojure
 {:store {:backend :jdbc
@@ -33,6 +32,10 @@ and one environment variable for the configuration of the jdbc backend:
 DATAHIKE_STORE_BACKEND=jdbc
 DATAHIKE_STORE_CONFIG='{:dbtype "postgresql" :user "datahike" :password "datahike" :dbname "datahike"}'
 ```
+
+It is also possible to pass a configuration url via `:jdbcUrl` like it is mentioned in the underlying library [next.jdbc](https://cljdoc.org/d/seancorfield/next.jdbc/1.0.462/doc/getting-started#the-db-spec-hash-map). The Url can pass additional arguments in the query part or you can combine the url with arguments passed as key-value-pairs.
+
+Arguments not mentioned will be passed downstream to the corresponding jdbc-driver so every configuration option available should be working.
 
 ## Prerequisites
 For this backend to work you need to choose a database that is supported by JDBC. Please have a
@@ -54,10 +57,10 @@ have a look into the tests to see how to configure these backend stores.
 
 ## Usage
 Add to your Leiningen or Boot dependencies:
-[http://clojars.org/io.replikativ/datahike-postgres]
+[![Clojars Project](https://img.shields.io/clojars/v/io.replikativ/datahike-jdbc.svg)](https://clojars.org/io.replikativ/datahike-jdbc)
 
 Now require the Datahike API and the datahike-jdbc namespace in your editor or REPL using the
-keyword ~:jdbc~. If you want to use other backends than JDBC please refer to the official
+keyword `:jdbc`. If you want to use other backends than JDBC please refer to the official
 [Datahike docs](https://github.com/replikativ/datahike/blob/master/doc/config.md).
 
 ### Run PostgreSQL on Docker
@@ -69,7 +72,7 @@ keyword ~:jdbc~. If you want to use other backends than JDBC please refer to the
 ```clojure
   (ns project.core
     (:require [datahike.api :as d]
-              [datahike-jdbc.core])
+              [datahike-jdbc.core]))
 
   ;; This configuration suits the config of the container started above.
   ;; In case you run your PostgreSQL instance with other settings, please

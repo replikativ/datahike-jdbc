@@ -1,87 +1,50 @@
 version: 2.1
 
-executors:
-  leiningen:
-    docker:
-      - image: circleci/clojure:openjdk-8-lein-2.9.3
-    environment:
-      LEIN_ROOT: nbd
-      JVM_OPTS: -Xmx3200m
-    working_directory: /home/circleci/datahike-jdbc
-
-jobs:
-  setup:
-    executor: leiningen
-    steps:
-      - restore_cache:
-          keys:
-            - source-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Branch }}
-            - source-
-      - checkout
-      - save_cache:
-          key: source-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - .git
-      - restore_cache:
-          keys:
-            - deps-{{ checksum "project.clj" }}
-            - deps-
-      - run: lein deps
-      - save_cache:
-          key: deps-{{ checksum "project.clj" }}
-          paths:
-            - /home/circleci/.m2
-            - /home/circleci/.lein
-      - persist_to_workspace:
-          root: /home/circleci/
-          paths:
-            - .m2
-            - datahike-jdbc
-            - bin
-
-  integrationtest:
-    executor: leiningen
-    docker:
-      - image: circleci/clojure:openjdk-8-lein-2.9.3
-      - image: circleci/postgres:11-alpine
-        environment:
-          POSTGRES_USER: alice
-          POSTGRES_PASSWORD: foo
-          POSTGRES_DB: config-test
-      - image: circleci/mariadb:10.4
-        environment:
-          MYSQL_USER: alice
-          MYSQL_PASSWORD: foo
-          MYSQL_DATABASE: config-test
-          MYSQL_RANDOM_ROOT_PASSWORD: true
-    steps:
-      - attach_workspace:
-          at: /home/circleci
-      - run:
-          name: Run Integrationtests
-          command: lein test
-          no_output_timeout: 5m
-
-  deploy:
-    executor: leiningen
-    steps:
-      - attach_workspace:
-          at: /home/circleci
-      - run:
-          command: lein deploy clojars
+orbs:
+  tools: replikativ/clj-tools@0
 
 workflows:
-  build_and_test:
+  build-test-and-deploy:
     jobs:
-      - setup
-      - integrationtest:
+      - tools/setup:
+          context: dockerhub-deploy
+          setup_cljs: false
+      - tools/format:
+          context: dockerhub-deploy
           requires:
-            - setup
-      - deploy:
+            - tools/setup
+      - tools/integrationtest-postgresql-mysql-mssql:
+          context: dockerhub-deploy
+          requires:
+            - tools/setup
+      - tools/build:
+          jarname: "datahike-jdbc"
+          context: dockerhub-deploy
+          requires:
+            - tools/setup
+      - tools/deploy-snapshot:
+          jarname: "datahike-jdbc"
+          context:
+            - clojars-deploy
+            - dockerhub-deploy
+          filters:
+            branches:
+              only: development
+          requires:
+            - tools/setup
+            - tools/format
+            - tools/integrationtest-postgresql-mysql-mssql
+            - tools/build
+      - tools/deploy-release:
+          jarname: "datahike-jdbc"
+          context:
+            - clojars-deploy
+            - dockerhub-deploy
           filters:
             branches:
               only: master
           requires:
-            - setup
-            - integrationtest
+            - tools/setup
+            - tools/format
+            - tools/integrationtest-postgresql-mysql-mssql
+            - tools/build

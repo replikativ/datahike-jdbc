@@ -1,35 +1,27 @@
 (ns datahike-jdbc.core
-  (:require [datahike.store :refer [empty-store delete-store connect-store scheme->index default-config config-spec]]
+  (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec release-store]]
             [datahike.config :refer [map-from-env]]
-            [hitchhiker.tree.bootstrap.konserve :as kons]
             [konserve-jdbc.core :as k]
-            [environ.core :refer [env]]
-            [clojure.spec.alpha :as s]
-            [clojure.edn :as edn]
-            [superv.async :refer [<?? S]]))
+            [clojure.spec.alpha :as s]))
 
 (defmethod empty-store :jdbc [store-config]
-  (kons/add-hitchhiker-tree-handlers
-   (<?? S (k/new-jdbc-store store-config))))
+  (k/connect-store store-config))
 
 (defmethod delete-store :jdbc [store-config]
-  (let [conn (<?? S (k/new-jdbc-store store-config))]
-    (<?? S (k/delete-store conn))))
+  (k/delete-store store-config))
 
 (defmethod connect-store :jdbc [store-config]
-  (<?? S (k/new-jdbc-store store-config)))
-
-(defmethod scheme->index :jdbc [_]
-  :datahike.index/hitchhiker-tree)
+  (k/connect-store store-config))
 
 (defmethod default-config :jdbc [config]
   (merge
-    (map-from-env :datahike-store-config {:dbtype "h2:mem"
-                                          :dbname "datahike"})
-    config))
+   (map-from-env :datahike-store-config {:dbtype "h2:mem"
+                                         :dbname "datahike"})
+   config))
 
 (s/def :datahike.store.jdbc/backend #{:jdbc})
 (s/def :datahike.store.jdbc/dbtype #{"h2" "h2:mem" "hsqldb" "jtds:sqlserver" "mysql" "oracle:oci" "oracle:thin" "postgresql" "redshift" "sqlite" "sqlserver"})
+(s/def :datahike.store.jdbc/jdbcUrl string?)
 (s/def :datahike.store.jdbc/dbname string?)
 (s/def :datahike.store.jdbc/dbname-separator string?)
 (s/def :datahike.store.jdbc/host string?)
@@ -38,9 +30,10 @@
 (s/def :datahike.store.jdbc/classname string?)
 (s/def :datahike.store.jdbc/user string?)
 (s/def :datahike.store.jdbc/password string?)
-(s/def ::jdbc (s/keys :req-un [:datahike.store.jdbc/backend
-                               :datahike.store.jdbc/dbtype]
-                      :opt-un [:datahike.store.jdbc/dbname
+(s/def ::jdbc (s/keys :req-un [:datahike.store.jdbc/backend]
+                      :opt-un [:datahike.store.jdbc/dbtype
+                               :datahike.store.jdbc/jdbcUrl
+                               :datahike.store.jdbc/dbname
                                :datahike.store.jdbc/dbname-separator
                                :datahike.store.jdbc/host
                                :datahike.store.jdbc/host-prefix
@@ -50,3 +43,6 @@
                                :datahike.store.jdbc/password]))
 
 (defmethod config-spec :jdbc [_] ::jdbc)
+
+(defmethod release-store :jdbc [_ store]
+  (k/release store {:sync? true}))

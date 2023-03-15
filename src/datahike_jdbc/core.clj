@@ -1,8 +1,14 @@
 (ns datahike-jdbc.core
-  (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec release-store]]
+  (:require [datahike.store :refer [empty-store delete-store connect-store default-config config-spec release-store store-identity]]
             [datahike.config :refer [map-from-env]]
             [konserve-jdbc.core :as k]
             [clojure.spec.alpha :as s]))
+
+(defmethod store-identity :jdbc [store-config]
+  (let [{:keys [jdbcUrl dbtype host port dbname]} store-config]
+    (if jdbcUrl
+      [:jdbc jdbcUrl]
+      [:jdbc dbtype host port dbname])))
 
 (defmethod empty-store :jdbc [store-config]
   (k/connect-store store-config))

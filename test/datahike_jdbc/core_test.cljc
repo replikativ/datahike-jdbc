@@ -5,7 +5,7 @@
    [datahike.integration-test :as dt]
    [datahike-jdbc.core]))
 
-(deftest ^:integration test-postgresql []
+(deftest ^:integration test-postgresql
   (let [config {:store {:backend :jdbc
                         :dbtype "postgresql"
                         :host "localhost"
@@ -16,7 +16,7 @@
                 :keep-history? false}]
     (dt/integration-test config)))
 
-(deftest ^:integration test-mysql []
+(deftest ^:integration test-mysql
   (let [config {:store {:backend :jdbc
                         :dbtype "mysql"
                         :user "alice"
@@ -26,7 +26,7 @@
                 :keep-history? false}]
     (dt/integration-test config)))
 
-(deftest ^:integration test-mssql []
+(deftest ^:integration test-mssql
   (let [config {:store {:backend :jdbc
                         :dbtype "sqlserver"
                         :user "sa"
@@ -36,7 +36,7 @@
                 :keep-history? false}]
     (dt/integration-test config)))
 
-(deftest ^:integration test-h2 []
+(deftest ^:integration test-h2
   (let [config {:store {:backend :jdbc
                         :dbtype "h2"
                         :dbname "./temp/db"}
@@ -44,6 +44,6 @@
                 :keep-history? false}]
     (dt/integration-test config)))
 
-(deftest ^:integration test-env []
+(deftest ^:integration test-env
   (let [config {:name "test-env"}]
     (dt/integration-test config)))

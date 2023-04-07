@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.replikativ</groupId>
+  <artifactId>datahike-jdbc</artifactId>
+  <packaging>jar</packaging>
+  <name>datahike-jdbc</name>
+  <description>A JDBC backend for Datahike</description>
+  <version>0.1.2</version>
+  <url>https://datahike.io</url>
+  <licenses>
+    <license>
+      <name>Eclipse</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:git@github.com:replikativ/datahike-jdbc.git</connection>
+    <developerConnection>scm:git:git@github.com/replikativ/datahike-jdbc.git</developerConnection>
+    <url>https://github.com/replikativ/datahike-jdbc</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>io.replikativ</groupId>
+      <artifactId>konserve-jdbc</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.replikativ</groupId>
+      <artifactId>superv.async</artifactId>
+      <version>0.2.11</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+  </build>
+  <repositories>
+    <repository>
+      <id>clojars</id>
+      <url>https://repo.clojars.org/</url>
+    </repository>
+  </repositories>
+</project>

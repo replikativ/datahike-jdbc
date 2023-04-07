@@ -5,28 +5,43 @@
    [datahike.integration-test :as dt]
    [datahike-jdbc.core]))
 
-(def jdbc-base-config {:store {:backend :jdbc}
-                       :schema-flexibility :write})
-
 (deftest ^:integration test-postgresql []
-  (let [config (update jdbc-base-config :store
-                       merge {:dbtype "postgresql"
-                              :jdbcUrl "jdbc:postgresql://localhost/config-test?user=alice"
-                              :password "foo"})]
+  (let [config {:store {:backend :jdbc
+                        :dbtype "postgresql"
+                        :host "localhost"
+                        :dbname "config-test"
+                        :user "alice"
+                        :password "foo"}
+                :schema-flexibility :read
+                :keep-history? false}]
     (dt/integration-test config)))
 
 (deftest ^:integration test-mysql []
-  (let [config (update jdbc-base-config :store
-                       merge {:dbtype "mysql"
-                              :user "alice"
-                              :password "foo"
-                              :dbname "config-test"})] 
+  (let [config {:store {:backend :jdbc
+                        :dbtype "mysql"
+                        :user "alice"
+                        :password "foo"
+                        :dbname "config-test"}
+                :schema-flexibility :write
+                :keep-history? false}]
+    (dt/integration-test config)))
+
+(deftest ^:integration test-mssql []
+  (let [config {:store {:backend :jdbc
+                        :dbtype "sqlserver"
+                        :user "sa"
+                        :password "passwordA1!"
+                        :dbname "tempdb"}
+                :schema-flexibility :write
+                :keep-history? false}]
     (dt/integration-test config)))
 
 (deftest ^:integration test-h2 []
-  (let [config (update jdbc-base-config :store
-                       merge {:dbtype "h2"
-                              :dbname "./temp/db"})]
+  (let [config {:store {:backend :jdbc
+                        :dbtype "h2"
+                        :dbname "./temp/db"}
+                :schema-flexibility :write
+                :keep-history? false}]
     (dt/integration-test config)))
 
 (deftest ^:integration test-env []

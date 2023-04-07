@@ -16,3 +16,4 @@ datahike.mv.db
 .idea/
 datahike-jdbc.iml
 .clj-kondo/
+.lsp/

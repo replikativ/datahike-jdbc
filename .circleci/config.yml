@@ -9,6 +9,11 @@ workflows:
       - tools/setup:
           context: dockerhub-deploy
           setup_cljs: false
+      - tools/build:
+          context: dockerhub-deploy
+          build_cljs: false
+          requires:
+            - tools/setup
       - tools/format:
           context: dockerhub-deploy
           requires:
@@ -16,35 +21,24 @@ workflows:
       - tools/integrationtest-postgresql-mysql-mssql:
           context: dockerhub-deploy
           requires:
-            - tools/setup
-      - tools/build:
-          jarname: "datahike-jdbc"
-          context: dockerhub-deploy
-          requires:
-            - tools/setup
-      - tools/deploy-snapshot:
-          jarname: "datahike-jdbc"
+            - tools/format
+            - tools/build
+      - tools/deploy:
           context:
             - clojars-deploy
             - dockerhub-deploy
           filters:
             branches:
-              only: development
+              only: main
           requires:
-            - tools/setup
-            - tools/format
             - tools/integrationtest-postgresql-mysql-mssql
-            - tools/build
-      - tools/deploy-release:
-          jarname: "datahike-jdbc"
+      - tools/release:
           context:
-            - clojars-deploy
+            - github-token
             - dockerhub-deploy
           filters:
             branches:
-              only: master
+              only: main
           requires:
-            - tools/setup
-            - tools/format
-            - tools/integrationtest-postgresql-mysql-mssql
-            - tools/build
+            - tools/deploy
+

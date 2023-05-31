@@ -4,7 +4,7 @@
 <a href="https://clojurians.slack.com/archives/CB7GJAN0L"><img src="https://img.shields.io/badge/clojurians%20slack-join%20channel-blueviolet"/></a>
 <a href="https://clojars.org/io.replikativ/datahike-jdbc"> <img src="https://img.shields.io/clojars/v/io.replikativ/datahike-jdbc.svg" /></a>
 <a href="https://circleci.com/gh/replikativ/datahike-jdbc"><img src="https://circleci.com/gh/replikativ/datahike-jdbc.svg?style=shield"/></a>
-<a href="https://github.com/replikativ/datahike-jdbc/tree/development"><img src="https://img.shields.io/github/last-commit/replikativ/datahike-jdbc/development"/></a>
+<a href="https://github.com/replikativ/datahike-jdbc/tree/main"><img src="https://img.shields.io/github/last-commit/replikativ/datahike-jdbc/main"/></a>
 </p>
 
 The goal of this backend is to support all JDBC backends in one with no penalty in performance.

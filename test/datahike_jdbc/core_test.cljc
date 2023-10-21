@@ -143,3 +143,43 @@
       (is (d/database-exists?))
       (d/delete-database)
       (is (not (d/database-exists?))))))
+
+(deftest ^:integration test-table
+  (let [config {:store {:backend :jdbc
+                        :dbtype "mysql"
+                        :user "alice"
+                        :password "foo"
+                        :dbname "config-test"
+                        :table "wonderland"}
+                :schema-flexibility :write
+                :keep-history? false}
+        config2 (assoc-in config [:store :table] "tea_party")
+        _ (d/delete-database config)
+        _ (d/delete-database config2)]
+    (is (not (d/database-exists? config)))
+    (is (not (d/database-exists? config2)))
+    (let [_      (d/create-database config)
+          _      (d/create-database config2)
+          conn   (d/connect config)
+          conn2   (d/connect config2)]
+      (d/transact conn [{:db/ident :name
+                         :db/valueType :db.type/string
+                         :db/cardinality :db.cardinality/one}
+                        {:db/ident :age
+                         :db/valueType :db.type/long
+                         :db/cardinality :db.cardinality/one}])
+      (d/transact conn [{:db/id 1, :name  "Ivan", :age   15}
+                        {:db/id 2, :name  "Petr", :age   37}
+                        {:db/id 3, :name  "Ivan", :age   37}
+                        {:db/id 4, :age 15}])
+      (is (= (d/q '[:find ?e :where [?e :name]] @conn)
+             #{[3] [2] [1]}))
+      (is (empty? (d/q '[:find ?e :where [?e :name]] @conn2)))
+      (d/release conn)
+      (d/release conn2)
+      (is (d/database-exists? config))
+      (d/delete-database config)
+      (is (d/database-exists? config2))
+      (d/delete-database config2)
+      (is (not (d/database-exists? config)))
+      (is (not (d/database-exists? config2))))))

@@ -37,6 +37,8 @@ It is also possible to pass a configuration url via `:jdbcUrl` like it is mentio
 
 Arguments not mentioned will be passed downstream to the corresponding jdbc-driver so every configuration option available should be working.
 
+BREAKING CHANGE: datahike-jdbc versions after 0.1.45 no longer include actual JDBC drivers. Before you upgrade please make sure your application provides the necessary dependencies.
+
 ## Prerequisites
 For this backend to work you need to choose a database that is supported by JDBC. Please have a
 look at the docs for [clojure.java.jdbc](https://github.com/clojure/java.jdbc/). For the sake
@@ -51,6 +53,7 @@ On your local machine your setup prerequisites could look something like this:
 2. A running instance of PostgreSQL that you can connect to.
 3. [A JDK to run your Clojure on](https://clojure.org/guides/getting_started)
 4. [Leiningen, Boot or Clojure CLI to run your code or a REPL](https://leiningen.org/#install)
+5. The JDBC drivers you wish to use added as a dependency (since `0.2.x`)
 
 We will stick with Leiningen for this manual. If you want to use MySQL or H2 for a try, please
 have a look into the tests to see how to configure these backend stores.
@@ -83,6 +86,7 @@ keyword `:jdbc`. If you want to use other backends than JDBC please refer to the
                     :port 5432
                     :user "alice"
                     :password "foo"
+                    :table "my_first_application" ;; defaults to konserve
                     :dbname "config-test"}})
 
   ;; Create a database at this place, by default configuration we have a strict

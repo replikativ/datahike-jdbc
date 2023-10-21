@@ -5,10 +5,10 @@
             [clojure.spec.alpha :as s]))
 
 (defmethod store-identity :jdbc [store-config]
-  (let [{:keys [jdbcUrl dbtype host port dbname]} store-config]
+  (let [{:keys [jdbcUrl dbtype host port dbname table]} store-config]
     (if jdbcUrl
-      [:jdbc jdbcUrl]
-      [:jdbc dbtype host port dbname])))
+      [:jdbc jdbcUrl table]
+      [:jdbc dbtype host port dbname table])))
 
 (defmethod empty-store :jdbc [store-config]
   (k/connect-store store-config))
@@ -36,6 +36,7 @@
 (s/def :datahike.store.jdbc/classname string?)
 (s/def :datahike.store.jdbc/user string?)
 (s/def :datahike.store.jdbc/password string?)
+(s/def :datahike.store.jdbc/table string?)
 (s/def ::jdbc (s/keys :req-un [:datahike.store.jdbc/backend]
                       :opt-un [:datahike.store.jdbc/dbtype
                                :datahike.store.jdbc/jdbcUrl
@@ -46,7 +47,8 @@
                                :datahike.store.jdbc/port
                                :datahike.store.jdbc/classname
                                :datahike.store.jdbc/user
-                               :datahike.store.jdbc/password]))
+                               :datahike.store.jdbc/password
+                               :datahike.store.jdbc/table]))
 
 (defmethod config-spec :jdbc [_] ::jdbc)
 

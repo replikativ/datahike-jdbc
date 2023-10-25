@@ -1,9 +1,15 @@
 {:deps {org.clojure/clojure         {:mvn/version "1.11.1" :scope "provided"}
-        io.replikativ/konserve-jdbc {:mvn/version "0.1.79"}}
+        io.replikativ/konserve-jdbc {:mvn/version "0.2.82"}
+        io.replikativ/datahike      {:mvn/version "0.6.1552" :scope "provided"}}
  :paths ["src"]
  :aliases {:test {:extra-paths ["test"]
-                  :extra-deps {lambdaisland/kaocha    {:mvn/version "1.84.1335"}
-                               io.replikativ/datahike {:mvn/version "0.6.1541"}}
+                  :extra-deps {lambdaisland/kaocha                {:mvn/version "1.84.1335"}
+                               com.h2database/h2                  {:mvn/version "2.1.214"}
+                               com.microsoft.sqlserver/mssql-jdbc {:mvn/version "9.4.1.jre11"}
+                               mysql/mysql-connector-java         {:mvn/version "8.0.25"}
+                               org.apache.derby/derby             {:mvn/version "10.16.1.1"}
+                               org.postgresql/postgresql          {:mvn/version "42.6.0"}
+                               org.xerial/sqlite-jdbc             {:mvn/version "3.41.2.2"}}
                   :main-opts ["-m" "kaocha.runner"]}
 
            :format {:extra-deps {cljfmt/cljfmt {:mvn/version "0.9.2"}}

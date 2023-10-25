@@ -12,7 +12,8 @@ pom.xml.asc
 .nrepl-port
 .cpcache/
 temp/
-datahike.mv.db
+*.mv.db
+*.trace.db
 .idea/
 datahike-jdbc.iml
 .clj-kondo/

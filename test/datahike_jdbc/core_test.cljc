@@ -190,15 +190,23 @@
                         :host "localhost"
                         :dbname "config-test"
                         :user "alice"
-                        :password "foo"}
+                        :password "foo"
+                        :table "samezies"}
                 :schema-flexibility :read
                 :keep-history? false}
         config2 {:store {:backend :jdbc
-                         :jdbcUrl "postgresql://alice:foo@localhost/config-test"}
+                         :jdbcUrl "postgresql://alice:foo@localhost/config-test"
+                         :table "samezies"}
                  :schema-flexibility :read
                  :keep-history? false}
         config3 {:store {:backend :jdbc
-                         :jdbcUrl "postgresql://alice:foo@127.0.0.1/config-test"}
+                         :jdbcUrl "postgresql://alice:foo@127.0.0.1/config-test"
+                         :table "samezies"}
+                 :schema-flexibility :read
+                 :keep-history? false}
+        config4 {:store {:backend :jdbc
+                         :jdbcUrl "postgresql://alice:foo@127.0.0.1/config-test"
+                         :table "different"}
                  :schema-flexibility :read
                  :keep-history? false}
         _ (d/delete-database config)]
@@ -207,6 +215,7 @@
           conn (d/connect config)
           conn2 (d/connect config2)
           conn3 (d/connect config2)]
+      (is (not (d/database-exists? config4)))
 
       (d/transact conn [{:db/id 1, :name  "Ivan", :age   15}
                         {:db/id 2, :name  "Petr", :age   37}

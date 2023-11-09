@@ -11,9 +11,11 @@
   ;; connection/uri->db-spec makes is possible but is rough around the edges
   ;; https://github.com/seancorfield/next-jdbc/issues/229
   (if (contains? cfg :jdbcUrl)
-    (-> cfg :jdbcUrl connection/uri->db-spec
-        (update :dbtype #(str/replace % #"postgres$" "postgresql"))
-        (update :port #(if (pos? %) % (-> connection/dbtypes (get (:dbtype %)) :port))))
+    (merge
+     (dissoc cfg :jdbcUrl)
+     (-> cfg :jdbcUrl connection/uri->db-spec
+         (update :dbtype #(str/replace % #"postgres$" "postgresql"))
+         (update :port #(if (pos? %) % (-> connection/dbtypes (get (:dbtype %)) :port)))))
     cfg))
 
 (defmethod store-identity :jdbc [store-config]

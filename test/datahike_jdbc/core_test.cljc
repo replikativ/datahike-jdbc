@@ -183,3 +183,46 @@
       (d/delete-database config2)
       (is (not (d/database-exists? config)))
       (is (not (d/database-exists? config2))))))
+
+(deftest ^:integration test-signature
+  (let [config {:store {:backend :jdbc
+                        :dbtype "postgresql"
+                        :host "localhost"
+                        :dbname "config-test"
+                        :user "alice"
+                        :password "foo"}
+                :schema-flexibility :read
+                :keep-history? false}
+        config2 {:store {:backend :jdbc
+                         :jdbcUrl "postgresql://alice:foo@localhost/config-test"}
+                 :schema-flexibility :read
+                 :keep-history? false}
+        config3 {:store {:backend :jdbc
+                         :jdbcUrl "postgresql://alice:foo@127.0.0.1/config-test"}
+                 :schema-flexibility :read
+                 :keep-history? false}
+        _ (d/delete-database config)]
+    (is (not (d/database-exists? config)))
+    (let [_ (d/create-database config)
+          conn (d/connect config)
+          conn2 (d/connect config2)
+          conn3 (d/connect config2)]
+
+      (d/transact conn [{:db/id 1, :name  "Ivan", :age   15}
+                        {:db/id 2, :name  "Petr", :age   37}
+                        {:db/id 3, :name  "Ivan", :age   37}
+                        {:db/id 4, :age 15}])
+      (is (= (d/q '[:find ?e :where [?e :name]] @conn2)
+             #{[3] [2] [1]}))
+
+      (is (= (d/q '[:find ?e :where [?e :name]] @conn3)
+             #{[3] [2] [1]}))
+
+      (d/release conn)
+      (is (d/database-exists? config))
+      (is (d/database-exists? config2))
+      (is (d/database-exists? config3))
+      (d/delete-database config)
+      (is (not (d/database-exists? config)))
+      (is (not (d/database-exists? config2)))
+      (is (not (d/database-exists? config3))))))

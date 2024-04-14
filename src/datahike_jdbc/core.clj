@@ -6,10 +6,7 @@
             [clojure.spec.alpha :as s]
             [clojure.string :as str]))
 
-(defn prepare-config [cfg]
-  ;; next.jdbc does not officially support the credentials in the format: driver://user:password@host/db
-  ;; connection/uri->db-spec makes is possible but is rough around the edges
-  ;; https://github.com/seancorfield/next-jdbc/issues/229
+(defn generate-signature [cfg]
   (if (contains? cfg :jdbcUrl)
     (merge
      (dissoc cfg :jdbcUrl)
@@ -20,22 +17,22 @@
 
 (defmethod store-identity :jdbc [store-config]
   ;; the store signature is made up of the dbtype, dbname, and table
-  (let [{:keys [dbtype _host _port dbname table]} (prepare-config store-config)]
+  (let [{:keys [dbtype _host _port dbname table]} (generate-signature store-config)]
     [:jdbc dbtype dbname table]))
 
 (defmethod empty-store :jdbc [store-config]
-  (k/connect-store (prepare-config store-config)))
+  (k/connect-store store-config))
 
 (defmethod delete-store :jdbc [store-config]
-  (k/delete-store (prepare-config store-config)))
+  (k/delete-store store-config))
 
 (defmethod connect-store :jdbc [store-config]
-  (k/connect-store (prepare-config store-config)))
+  (k/connect-store store-config))
 
 (defmethod default-config :jdbc [config]
   ;; with the introduction of the store-identity config data should derived from inputs and not set to default values
-  (let [env-config (prepare-config (map-from-env :datahike-store-config {}))
-        passed-config (prepare-config config)]
+  (let [env-config (map-from-env :datahike-store-config {})
+        passed-config config]
     (merge env-config passed-config)))
 
 (s/def :datahike.store.jdbc/backend #{:jdbc})

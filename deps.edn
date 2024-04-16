@@ -1,5 +1,5 @@
 {:deps {org.clojure/clojure         {:mvn/version "1.11.1" :scope "provided"}
-        io.replikativ/konserve-jdbc {:mvn/version "0.2.82"}
+        io.replikativ/konserve-jdbc {:mvn/version "0.2.84"}
         io.replikativ/datahike      {:mvn/version "0.6.1554" :scope "provided"}}
  :paths ["src"]
  :aliases {:test {:extra-paths ["test"]

@@ -1,6 +1,6 @@
 {:deps {org.clojure/clojure         {:mvn/version "1.11.1" :scope "provided"}
-        io.replikativ/konserve-jdbc {:mvn/version "0.2.85"}
-        io.replikativ/datahike      {:mvn/version "0.6.1554" :scope "provided"}}
+        io.replikativ/konserve-jdbc {:mvn/version "0.2.86"}
+        io.replikativ/datahike      {:mvn/version "0.6.1597" :scope "provided"}}
  :paths ["src"]
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps {lambdaisland/kaocha                {:mvn/version "1.84.1335"}
